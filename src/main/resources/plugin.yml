@@ -1,0 +1,6 @@
+name: Dynmap-HeroChat
+main: org.dynmap.herochat.DynmapHeroChatPlugin
+version: "${project.version}"
+author: mikeprimm
+depend: [ dynmap, Herochat ]
+

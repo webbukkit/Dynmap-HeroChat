@@ -1,0 +1,11 @@
+# Dynmap-HeroChat configuration
+#
+# Control which HeroChat channel messages from web are directed to 
+web-to-channel: Global
+# Control which channels are monitored and reported to the web
+channel-to-web-list:
+  - Global
+
+# format for messages from web: %playername% substitutes sender ID (typically IP), %message% includes text
+webmsgformat: "&color;2[WEB] %playername%: &color;f%message%"
+  
