@@ -20,6 +20,7 @@ import org.dynmap.markers.MarkerAPI;
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelChatEvent;
 import com.dthielke.herochat.ChannelManager;
+import com.dthielke.herochat.Chatter.Result;
 import com.dthielke.herochat.Herochat;
 
 public class DynmapHeroChatPlugin extends JavaPlugin {
@@ -62,8 +63,10 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
             if(!enabled) return;
             String cname = event.getChannel().getName();
             String pname = event.getSender().getName();
-            if(channel_to_web_list.contains(cname)) {
-                api.sendBroadcastToWeb(pname, event.getBukkitEvent().getMessage());
+            if(event.getResult() == Result.ALLOWED) {
+                if(channel_to_web_list.contains(cname)) {
+                    api.sendBroadcastToWeb(pname, event.getBukkitEvent().getMessage());
+                }
             }
         }
         @EventHandler
