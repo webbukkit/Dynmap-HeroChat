@@ -6,9 +6,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
@@ -65,10 +68,17 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
             String pname = event.getSender().getName();
             if(event.getResult() == Result.ALLOWED) {
                 if(channel_to_web_list.contains(cname)) {
-                    api.sendBroadcastToWeb(pname, event.getBukkitEvent().getMessage());
+                    Player p = getServer().getPlayerExact(pname);
+                    if(p != null) {
+                        api.postPlayerMessageToWeb(p.getName(), p.getDisplayName(), event.getBukkitEvent().getMessage());
+                    }
+                    else {
+                        api.sendBroadcastToWeb(pname, event.getBukkitEvent().getMessage());
+                    }
                 }
             }
         }
+        @SuppressWarnings("unused")
         @EventHandler
         public void onDynmapWebChatMessage(DynmapWebChatEvent event) {
             if(!enabled) return;
@@ -81,6 +91,18 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
                 s = s.replace("%message%", event.getMessage());
                 from_web_channel.announce(s);
             }
+        }
+        @SuppressWarnings("unused")
+        @EventHandler(priority=EventPriority.MONITOR)
+        public void onPlayerJoined(PlayerJoinEvent event) {
+            if(!enabled) return;
+            api.postPlayerJoinQuitToWeb(event.getPlayer().getName(), event.getPlayer().getDisplayName(), true);
+        }
+        @SuppressWarnings("unused")
+        @EventHandler(priority=EventPriority.MONITOR)
+        public void onPlayerQuit(PlayerQuitEvent event) {
+            if(!enabled) return;
+            api.postPlayerJoinQuitToWeb(event.getPlayer().getName(), event.getPlayer().getDisplayName(), false);
         }
     }
     
@@ -114,6 +136,8 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
             activate();
     }
 
+    private boolean prev_chat_to_web = false;
+    
     private void activate() {
         /* Now, get markers API */
         markerapi = api.getMarkerAPI();
@@ -149,6 +173,10 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
         /* Get format message */
         webmsgformat = cfg.getString("webmsgformat", "&color;2[WEB] %playername%: &color;f%message%");
         
+        /* Disable default chat-to-web processing */
+        if(api.setDisableChatToWebProcessing(true))
+            prev_chat_to_web = true;
+        
         info("version " + this.getDescription().getVersion() + " is activated");
         enabled = true;
         
@@ -157,6 +185,8 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
     public void onDisable() {
         enabled = false;
         stop = true;
+        if(prev_chat_to_web)    /* Enable if we were the one to disable it */
+            api.setDisableChatToWebProcessing(false);
     }
 
 }
