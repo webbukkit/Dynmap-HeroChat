@@ -1,4 +1,5 @@
 package org.dynmap.herochat;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,10 +71,10 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
                 if(channel_to_web_list.contains(cname)) {
                     Player p = getServer().getPlayerExact(pname);
                     if(p != null) {
-                        api.postPlayerMessageToWeb(p.getName(), p.getDisplayName(), event.getBukkitEvent().getMessage());
+                        api.postPlayerMessageToWeb(p.getName(), p.getDisplayName(), event.getMessage());
                     }
                     else {
-                        api.sendBroadcastToWeb(pname, event.getBukkitEvent().getMessage());
+                        api.sendBroadcastToWeb(pname, event.getMessage());
                     }
                 }
             }
@@ -134,6 +135,12 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
         /* If both enabled, activate */
         if(dynmap.isEnabled() && herochat.isEnabled())
             activate();
+        
+        try {
+            MetricsLite ml = new MetricsLite(this);
+            ml.start();
+        } catch (IOException iox) {
+        }
     }
 
     private boolean prev_chat_to_web = false;
