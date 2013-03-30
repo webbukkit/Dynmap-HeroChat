@@ -28,8 +28,7 @@ import com.dthielke.herochat.Chatter.Result;
 import com.dthielke.herochat.Herochat;
 
 public class DynmapHeroChatPlugin extends JavaPlugin {
-    private static final Logger log = Logger.getLogger("Minecraft");
-    private static final String LOG_PREFIX = "[Dynmap-HeroChat] ";
+    private static Logger log;
 
     Plugin dynmap;
     DynmapAPI api;
@@ -45,11 +44,16 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
     
     boolean stop;
     
+    @Override
+    public void onLoad() {
+        log = this.getLogger();
+    }
+    
     public static void info(String msg) {
-        log.log(Level.INFO, LOG_PREFIX + msg);
+        log.log(Level.INFO, msg);
     }
     public static void severe(String msg) {
-        log.log(Level.SEVERE, LOG_PREFIX + msg);
+        log.log(Level.SEVERE, msg);
     }
 
     private class OurListener implements Listener {
