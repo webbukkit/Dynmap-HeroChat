@@ -82,19 +82,19 @@
   	<dependency>
   		<groupId>org.bukkit</groupId>
   		<artifactId>bukkit</artifactId>
-  		<version>1.4.5-R1.0</version>
+  		<version>1.6.4-R1.0</version>
   	</dependency>
   	<dependency>
   		<groupId>org.dynmap</groupId>
   		<artifactId>dynmap-api</artifactId>
-  		<version>1.0</version>
+  		<version>1.9</version>
   	</dependency>
   	<dependency>
   		<groupId>org.dthielke</groupId>
-  		<artifactId>Herochat</artifactId>
-  		<version>5.6.1</version>
+  		<artifactId>HeroChat</artifactId>
+  		<version>5.6.7</version>
   		<scope>system</scope>
-  		<systemPath>${project.basedir}/Herochat.jar</systemPath>
+  		<systemPath>${project.basedir}/HeroChat-5.6.7.jar</systemPath>
   	</dependency>
   </dependencies>
   <properties>
