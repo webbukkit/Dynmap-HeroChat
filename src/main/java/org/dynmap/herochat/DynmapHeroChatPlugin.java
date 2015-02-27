@@ -68,17 +68,13 @@ public class DynmapHeroChatPlugin extends JavaPlugin {
         }
         @EventHandler(priority=EventPriority.MONITOR)
         public void onHeroChatMessage(ChannelChatEvent event) {
-            System.out.println("onHeroChatMessage(" + event.getMessage() + ")");
             if(!enabled) return;
             String cname = event.getChannel().getName();
             String pname = event.getSender().getName();
             if(event.getResult() == Result.ALLOWED) {
-                System.out.println("onHeroChatMessage(" + event.getMessage() + ") - ALLOWED - " + cname);
                 if(channel_to_web_list.contains(cname)) {
-                    System.out.println("pname=" + pname);
                     Player p = getServer().getPlayerExact(pname);
                     if(p != null) {
-                        System.out.println(p.getName() + ", " + p.getDisplayName());
                         api.postPlayerMessageToWeb(p.getName(), p.getDisplayName(), event.getMessage());
                     }
                     else {
